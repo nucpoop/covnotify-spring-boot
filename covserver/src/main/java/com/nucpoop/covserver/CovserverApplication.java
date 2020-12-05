@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.nucpoop.covserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
