@@ -1,20 +1,53 @@
 package com.nucpoop.covserver.util;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Utils {
 
+	public static void getNodeListFromXML(StringBuilder sb)
+			throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+		Document document = documentBuilder.parse(new InputSource(new StringReader(sb.toString())));
+
+		Element root = document.getDocumentElement();
+
+		NodeList children = root.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node node = children.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE) {
+				Element element = (Element)node;
+				String nodeName = element.getNodeName();
+				
+				
+			}
+		}
+
+	}
+
 	public static StringBuilder getCovData() throws IOException {
-		final String SERVICE_KEY="In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
-		
+		final String SERVICE_KEY = "In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
+
 		StringBuilder urlBuilder = new StringBuilder(
 				"http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson");
-		urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "="+ SERVICE_KEY); /* Service Key */
+		urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + SERVICE_KEY); /* Service Key */
 		urlBuilder
 				.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /* 페이지번호 */
 		urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "="
@@ -41,6 +74,11 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
+		try { 
+			getNodeListFromXML(sb);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return sb;
 	}
 
