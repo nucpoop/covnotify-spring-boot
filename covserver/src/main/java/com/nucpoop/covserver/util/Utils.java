@@ -1,6 +1,7 @@
 package com.nucpoop.covserver.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -8,9 +9,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import com.nucpoop.covserver.dto.CovResponse;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,26 +26,42 @@ import org.xml.sax.SAXException;
 
 public class Utils {
 
-	public static void getNodeListFromXML(StringBuilder sb)
-			throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-		Document document = documentBuilder.parse(new InputSource(new StringReader(sb.toString())));
+	public static void getResponseXML(StringBuilder sb) {
+		// CovResponse response = new CovResponse();
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(CovResponse.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			CovResponse covResponse;
+			covResponse = (CovResponse) unmarshaller.unmarshal(new StringReader(sb.toString()));
 
-		Element root = document.getDocumentElement();
-
-		NodeList children = root.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++) {
-			Node node = children.item(i);
-			if(node.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element)node;
-				String nodeName = element.getNodeName();
-				
-				
-			}
+			covResponse.toString();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-
 	}
+
+	// public static void getNodeListFromXML(StringBuilder sb)
+	// throws ParserConfigurationException, SAXException, IOException {
+	// DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	// DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+
+	// Xml to NodeList
+	// Document document = documentBuilder.parse(new InputSource(new
+	// StringReader(sb.toString())));
+
+	// Element root = document.getDocumentElement();
+
+	// NodeList children = root.getChildNodes();
+	// for (int i = 0; i < children.getLength(); i++) {
+	// Node node = children.item(i);
+	// if(node.getNodeType() == Node.ELEMENT_NODE) {
+	// Element element = (Element)node;
+	// String nodeName = element.getNodeName();
+
+	// }
+	// }
+
+	// }
 
 	public static StringBuilder getCovData() throws IOException {
 		final String SERVICE_KEY = "In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
@@ -74,11 +95,13 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-		try { 
-			getNodeListFromXML(sb);	
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		getResponseXML(sb);
+		// try {
+		// getNodeListFromXML(sb);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 		return sb;
 	}
 

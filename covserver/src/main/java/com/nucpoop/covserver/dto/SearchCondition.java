@@ -11,10 +11,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Entity
 public class SearchCondition {
 	int pageNo;
 	int numberOfRows;
-	int startCreateDt;
-	int endCreateDt;
+	String startCreateDt;
+	String endCreateDt;
 }
