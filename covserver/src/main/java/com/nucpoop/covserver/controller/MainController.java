@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.nucpoop.covserver.util.Utils;
 
@@ -14,7 +13,7 @@ public class MainController {
 	
 	@RequestMapping("/")
 	public String hello() {
-		return "test";
+		return "user/test";
 	}
 	
 	@RequestMapping("/test")
