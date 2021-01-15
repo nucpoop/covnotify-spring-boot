@@ -1,4 +1,4 @@
-package com.nucpoop.covserver.dto;
+package com.nucpoop.covserver.model;
 
 import javax.persistence.Entity;
 
