@@ -16,6 +16,7 @@ public class CovserverApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CovserverApplication.class, args);
 	}
+	
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();

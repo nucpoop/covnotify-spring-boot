@@ -33,7 +33,12 @@ class CovserverApplicationTests {
 
 	}
 
-	@Test public void testInsert(){
-		
+	@Test 
+	public void testInsert(){
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

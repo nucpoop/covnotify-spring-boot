@@ -1,6 +1,6 @@
 package com.nucpoop.covserver.model;
 
-import javax.persistence.Entity;
+//import javax.persistence.Entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
