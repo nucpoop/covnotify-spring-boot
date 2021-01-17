@@ -6,10 +6,10 @@ import javax.sql.DataSource;
 
 import com.nucpoop.covserver.CovserverApplication;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -40,5 +40,19 @@ class CovserverApplicationTests {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Test
+	public void encryptionTest(){
+		StandardPBEStringEncryptor jasypt = new StandardPBEStringEncryptor();
+        jasypt.setPassword("test");
+        jasypt.setAlgorithm("PBEWithMD5AndDES");
+ 
+ 
+        String encryptedText = jasypt.encrypt("test");
+        String plainText = jasypt.decrypt(encryptedText);
+ 
+        System.out.println("encryptedText:  " + encryptedText);
+        System.out.println("plainText:  " + plainText);
 	}
 }
