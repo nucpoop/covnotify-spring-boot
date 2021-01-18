@@ -3,6 +3,8 @@ package com.nucpoop.covserver.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.json.JSONObject;
+import org.json.XML;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nucpoop.covserver.dao.UserDao;
 import com.nucpoop.covserver.model.User;
+import com.nucpoop.covserver.service.UserService;
 import com.nucpoop.covserver.util.Utils;
 
 @RestController
@@ -20,7 +23,8 @@ import com.nucpoop.covserver.util.Utils;
 public class MainController {
 
 	@Autowired
-	private UserDao userDao;
+	private UserService userService;
+	//private UserDao userDao;
 
 	@RequestMapping("/")
 	public String hello() {
@@ -29,19 +33,20 @@ public class MainController {
 
 	@RequestMapping("/test")
 	public @ResponseBody String test() throws IOException {
+		JSONObject jsonObject = XML.toJSONObject(Utils.getCovData().toString());
 
-		return Utils.getCovData().toString();
+		return jsonObject.toString();
 	}
 
 	@RequestMapping("/user")
 	public List<User> users() throws Exception {
-		List<User> userList = userDao.selectUsers();
+		List<User> userList = userService.selectUsers();
 		return userList;
 	}
 
 	@RequestMapping("/userbyid")
 	public User userByID(@RequestParam(value = "id") int id) throws Exception {
-		User user = userDao.selectUserByID(id);
+		User user = userService.selectUserByID(id);
 		return user;
 	}
 
@@ -53,7 +58,9 @@ public class MainController {
 		User user = User.builder()
 		.userID(id).userPasswd(passwd).userName(name).userPhone(phone).userEmail(email)
 				.build();
-		result = userDao.insertUser(user);
+		result = userService.insertUser(user);
 		return result;
 	}
+
+	
 }
