@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.nucpoop.covserver.dao.UserDao">
+<mapper namespace="com.nucpoop.covserver.mapper.UserMapper">
 
   <select id="selectUsers" resultType="com.nucpoop.covserver.model.User">
   	SELECT * FROM user_temp

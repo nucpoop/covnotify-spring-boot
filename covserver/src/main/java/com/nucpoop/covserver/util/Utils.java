@@ -15,7 +15,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.nucpoop.covserver.model.CovResponse;
+import com.nucpoop.covserver.model.CovData;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,10 +29,10 @@ public class Utils {
 	public static void getResponseXML(StringBuilder sb) {
 		// CovResponse response = new CovResponse();
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(CovResponse.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(CovData.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			CovResponse covResponse;
-			covResponse = (CovResponse) unmarshaller.unmarshal(new StringReader(sb.toString()));
+			CovData covResponse;
+			covResponse = (CovData) unmarshaller.unmarshal(new StringReader(sb.toString()));
 
 			covResponse.toString();
 		} catch (Exception e) {
@@ -66,18 +66,19 @@ public class Utils {
 	public static StringBuilder getCovData() throws IOException {
 
 		final String SERVICE_KEY = "In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
+		final String ENCODING = "UTF-8";
 
 		StringBuilder urlBuilder = new StringBuilder(
 				"http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson");
-		urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + SERVICE_KEY); /* Service Key */
+		urlBuilder.append("?" + URLEncoder.encode("ServiceKey", ENCODING) + "=" + SERVICE_KEY); /* Service Key */
 		urlBuilder
-				.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /* 페이지번호 */
-		urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "="
-				+ URLEncoder.encode("10", "UTF-8")); /* 한 페이지 결과 수 */
-		urlBuilder.append("&" + URLEncoder.encode("startCreateDt", "UTF-8") + "="
-				+ URLEncoder.encode("20200310", "UTF-8")); /* 검색할 생성일 범위의 시작 */
-		urlBuilder.append("&" + URLEncoder.encode("endCreateDt", "UTF-8") + "="
-				+ URLEncoder.encode("20200315", "UTF-8")); /* 검색할 생성일 범위의 종료 */
+				.append("&" + URLEncoder.encode("pageNo", ENCODING) + "=" + URLEncoder.encode("1", ENCODING)); /* 페이지번호 */
+		urlBuilder.append("&" + URLEncoder.encode("numOfRows", ENCODING) + "="
+				+ URLEncoder.encode("10", ENCODING)); /* 한 페이지 결과 수 */
+		urlBuilder.append("&" + URLEncoder.encode("startCreateDt", ENCODING) + "="
+				+ URLEncoder.encode("20200310", ENCODING)); /* 검색할 생성일 범위의 시작 */
+		urlBuilder.append("&" + URLEncoder.encode("endCreateDt", ENCODING) + "="
+				+ URLEncoder.encode("20200315", ENCODING)); /* 검색할 생성일 범위의 종료 */
 
 		URL url = new URL(urlBuilder.toString());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

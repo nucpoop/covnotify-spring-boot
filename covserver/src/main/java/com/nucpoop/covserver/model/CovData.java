@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "response")
-public class CovResponse {
+public class CovData {
     @XmlElement
     Header header;
     @XmlElement

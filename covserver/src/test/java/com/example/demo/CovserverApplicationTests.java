@@ -33,15 +33,6 @@ class CovserverApplicationTests {
 
 	}
 
-	@Test 
-	public void testInsert(){
-		try {
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Test
 	public void encryptionTest(){
 		StandardPBEStringEncryptor jasypt = new StandardPBEStringEncryptor();
