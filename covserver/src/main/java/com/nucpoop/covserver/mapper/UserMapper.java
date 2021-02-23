@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
     List<User> selectUsers() throws Exception;
-    User selectUserByID(int param) throws Exception;
+    User selectUserByIndex(int index) throws Exception;
+    User selectUserByID(String id) throws Exception;
     int insertUser(User user) throws Exception;
 }

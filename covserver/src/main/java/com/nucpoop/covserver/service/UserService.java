@@ -7,6 +7,7 @@ import com.nucpoop.covserver.model.User;
 
 public interface UserService {
     List<User> selectUsers() throws Exception ;
-    User selectUserByID(int param) throws Exception ;
+    User selectUserByIndex(int index) throws Exception ;
     int insertUser(User user) throws Exception ;  
+    User loginUser(String id) throws Exception;
 }

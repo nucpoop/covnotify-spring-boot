@@ -38,7 +38,7 @@ public class UserController {
 
 	@RequestMapping("/userbyid")
 	public User userByID(@RequestParam(value = "id") int id) throws Exception {
-		User user = userService.selectUserByID(id);
+		User user = userService.selectUserByIndex(id);
 		return user;
 	}
 

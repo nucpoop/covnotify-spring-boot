@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User selectUserByID(int param) throws Exception {
-        User user = userMapper.selectUserByID(param);
+    public User selectUserByIndex(int index) throws Exception {
+        User user = userMapper.selectUserByIndex(index);
         return user;
     }
 
@@ -30,5 +30,11 @@ public class UserServiceImpl implements UserService{
     public int insertUser(User user) throws Exception {
         int result = userMapper.insertUser(user);
         return result;
+    }
+
+    @Override
+    public User loginUser(String id) throws Exception{
+        User user = userMapper.selectUserByID(id);
+        return user;
     }
 }

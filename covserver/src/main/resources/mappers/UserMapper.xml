@@ -7,8 +7,13 @@
   <select id="selectUsers" resultType="com.nucpoop.covserver.model.User">
   	SELECT * FROM user_temp
   </select>
-  <select id="selectUserByID" parameterType="int" resultType="com.nucpoop.covserver.model.User">
-    select * from user_temp where id = #{id}
+
+  <select id="selectUserByIndex" parameterType="int" resultType="com.nucpoop.covserver.model.User">
+    select * from user_temp where id = #{index}
+  </select>
+
+  <select id="selectUserByID" parameterType="String" resultType="com.nucpoop.covserver.model.User">
+  select * from user_temp where userID = #{id}
   </select>
 
 
