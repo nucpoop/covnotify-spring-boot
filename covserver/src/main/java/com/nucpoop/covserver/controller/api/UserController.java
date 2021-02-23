@@ -42,15 +42,15 @@ public class UserController {
 		return user;
 	}
 
-	@RequestMapping("/user_insert")
-	public int userInsert(@RequestParam(value = "userID") String id, @RequestParam(value = "userPasswd") String passwd,
-			@RequestParam(value = "userName") String name, @RequestParam(value = "userPhone") String phone,
-			@RequestParam(value = "userEmail") String email) throws Exception {
-		int result;		
-		User user = User.builder()
-		.userID(id).userPasswd(passwd).userName(name).userPhone(phone).userEmail(email)
-				.build();
-		result = userService.insertUser(user);
-		return result;
-	}
+	// @RequestMapping("/user_insert")
+	// public int userInsert(@RequestParam(value = "userID") String id, @RequestParam(value = "userPasswd") String passwd,
+	// 		@RequestParam(value = "userName") String name, @RequestParam(value = "userPhone") String phone,
+	// 		@RequestParam(value = "userEmail") String email) throws Exception {
+	// 	int result;		
+	// 	User user = User.builder()
+	// 	.userID(id).userPasswd(passwd).userName(name).userPhone(phone).userEmail(email)
+	// 			.build();
+	// 	result = userService.insertUser(user);
+	// 	return result;
+	// }
 }

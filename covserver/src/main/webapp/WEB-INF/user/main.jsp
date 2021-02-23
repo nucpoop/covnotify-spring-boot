@@ -7,6 +7,11 @@
     <title>Insert title here</title>
 </head>
 <body>
-    <h1>Hello Spring Boot!</h1>
+    <form method="POST" action="login">
+        <input type="submit" value="login"/>
+    </form>
+    <form action="signup">
+        <input type="submit" value="signup"/>
+    </form>
 </body>
 </html>
