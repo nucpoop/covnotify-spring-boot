@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User loginUser(String id) throws Exception{
+    public User selectUserByID(String id) throws Exception{
         User user = userMapper.selectUserByID(id);
         return user;
     }

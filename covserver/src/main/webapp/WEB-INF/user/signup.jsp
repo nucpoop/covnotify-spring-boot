@@ -29,15 +29,21 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>이름</th>
+                        <td>
+                            <input name="userName" id="userName" size="8" tabindex="4" />
+                        </td>
+                    </tr>
+                    <tr>
                         <th>전화번호</th>
                         <td>
-                            <input name="userPhone" id="userPhone" size="8" tabindex="4" />
+                            <input name="userPhone" id="userPhone" size="8" tabindex="5" />
                         </td>
                     </tr>
                     <tr>
                         <th>이메일</th>
                         <td>
-                            <input name="userEmail" id="userEmail" size="30" tabindex="5" />
+                            <input name="userEmail" id="userEmail" size="30" tabindex="6" />
                         </td>
                     </tr>
                 </table>

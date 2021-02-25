@@ -34,7 +34,7 @@ public class MainController {
     @PostMapping("/loginComplete")
     public ModelAndView loginComplete(User user, HttpServletResponse response, HttpSession session) throws Exception {
         PrintWriter out = response.getWriter();
-        User passuser = userService.loginUser(user.getUserID());
+        User passuser = userService.selectUserByID(user.getUserID());
 
         if (passuser == null) {
             out.println("<script>");
@@ -54,14 +54,25 @@ public class MainController {
         return null;
     }
 
+    @PostMapping("/signupComplete")
+    public ModelAndView signupComplete(User user, HttpServletResponse response, HttpSession session) throws Exception{
+
+        PrintWriter out = response.getWriter();
+        if(userService.selectUserByID(user.getUserID()) == null){
+            userService.insertUser(user);
+            return new ModelAndView("./user/signup-complete");
+        }else{
+            out.println("<script>");
+            out.println("alert('Already exist ID!');");
+            out.println("history.back();");
+            out.println("</script>");
+        }
+        
+        return null;
+    }
+
     @RequestMapping("/signup")
     public ModelAndView signup(){
         return new ModelAndView("./user/signup");
-    }
-
-    @RequestMapping("/login-error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login.html";
     }
 }
