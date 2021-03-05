@@ -1,16 +1,16 @@
 package com.nucpoop.covserver.model;
 
-// import lombok.Builder;
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
-// import lombok.Setter;
-// import lombok.ToString;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-// @NoArgsConstructor
-// @Setter
-// @Getter
-// @Builder
-// @ToString
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@ToString
 public class User {
     private int id;
     private String user_id;
@@ -65,5 +65,14 @@ public class User {
 
     public void setUserEmail(String userEmail) {
         this.user_email = userEmail;
+    }
+
+    public User(int id, String user_id, String user_passwd, String user_name, String user_phone, String user_email) {
+        this.id = id;
+        this.user_id = user_id;
+        this.user_passwd = user_passwd;
+        this.user_name = user_name;
+        this.user_phone = user_phone;
+        this.user_email = user_email;
     }
 }

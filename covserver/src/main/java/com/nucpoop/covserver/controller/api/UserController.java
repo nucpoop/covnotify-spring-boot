@@ -30,6 +30,12 @@ public class UserController {
 		return jsonObject.toString();
 	}
 
+	@RequestMapping("/testLocal")
+	public @ResponseBody String testLocal() throws IOException{
+		JSONObject jsonObject = XML.toJSONObject(Utils.getCovDataLocal().toString());
+		return jsonObject.toString();
+	}
+
 	@RequestMapping("/user")
 	public List<User> users() throws Exception {
 		List<User> userList = userService.selectUsers();

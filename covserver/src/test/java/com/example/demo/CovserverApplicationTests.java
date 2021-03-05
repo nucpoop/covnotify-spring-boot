@@ -5,6 +5,7 @@ import java.sql.Connection;
 import javax.sql.DataSource;
 
 import com.nucpoop.covserver.CovserverApplication;
+import com.nucpoop.covserver.util.Utils;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,16 @@ class CovserverApplicationTests {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Test
+	public void testGetCov(){
+		try {
+			System.out.println(Utils.getCovData().toString());	
+		} catch (Exception e) {
+			//TODO: handle exception
+		}
+		
 	}
 
 	@Test

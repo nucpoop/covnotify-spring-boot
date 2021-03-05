@@ -1,7 +1,6 @@
 package com.nucpoop.covserver.util;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -11,18 +10,8 @@ import java.net.URLEncoder;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import com.nucpoop.covserver.model.CovData;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class Utils {
 
@@ -109,6 +98,40 @@ public class Utils {
 		// e.printStackTrace();
 		// }
 		return sb;
+	}
+
+	public static StringBuilder getCovDataLocal() throws IOException{
+
+		final String SERVICE_KEY = "In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
+		final String ENCODING = "UTF-8";
+
+		StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("ServiceKey",ENCODING) + "=" + SERVICE_KEY); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("ServiceKey",ENCODING) + "=" + URLEncoder.encode("-", ENCODING)); /*공공데이터포털에서 받은 인증키*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo",ENCODING) + "=" + URLEncoder.encode("1", ENCODING)); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows",ENCODING) + "=" + URLEncoder.encode("10", ENCODING)); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("startCreateDt",ENCODING) + "=" + URLEncoder.encode("20200410", ENCODING)); /*검색할 생성일 범위의 시작*/
+        urlBuilder.append("&" + URLEncoder.encode("endCreateDt",ENCODING) + "=" + URLEncoder.encode("20200410", ENCODING)); /*검색할 생성일 범위의 종료*/
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        System.out.println("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+		getResponseXML(sb);
+        return sb;
 	}
 
 }
