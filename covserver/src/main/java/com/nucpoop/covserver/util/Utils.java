@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import com.nucpoop.covserver.model.CovData;
+import com.nucpoop.covserver.model.SearchCondition;
 
 public class Utils {
 
@@ -54,7 +55,7 @@ public class Utils {
 
 	// }
 
-	public static StringBuilder getCovData() throws IOException {
+	public static StringBuilder getCovData(SearchCondition condition) throws IOException {
 
 		final String SERVICE_KEY = "In700GpDhOczBBTNPW9EKqfV2XwqE5ff7638azwe2D9uetiEFgIRLsnK%2FIwzUVJc0xorUJOma6aR4bKJYRu7uQ%3D%3D";
 		final String ENCODING = "UTF-8";

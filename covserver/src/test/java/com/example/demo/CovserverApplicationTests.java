@@ -37,7 +37,7 @@ class CovserverApplicationTests {
 	@Test
 	public void testGetCov(){
 		try {
-			System.out.println(Utils.getCovData().toString());	
+			//System.out.println(Utils.getCovData().toString());	
 		} catch (Exception e) {
 			//TODO: handle exception
 		}

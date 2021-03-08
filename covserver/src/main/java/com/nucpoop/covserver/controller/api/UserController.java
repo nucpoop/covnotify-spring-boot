@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nucpoop.covserver.model.SearchCondition;
 import com.nucpoop.covserver.model.User;
 import com.nucpoop.covserver.service.UserService;
 import com.nucpoop.covserver.util.Utils;
@@ -28,15 +29,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/ip")
-	public ResponseEntity<String> ip (HttpServletRequest request){
-		System.out.println("Ip Request");
-		return ResponseEntity.ok(request.getRemoteAddr());
-	}
-
 	@RequestMapping("/cov")
-	public ResponseEntity<String> cov() throws IOException {
-		JSONObject jsonObject = XML.toJSONObject(Utils.getCovData().toString());
+	public ResponseEntity<String> cov(@RequestParam(value = "date") String date) throws IOException {
+		SearchCondition searchCondition = SearchCondition.builder().pageNo(1).numberOfRows(1).startCreateDt(date).endCreateDt(date).build();
+		JSONObject jsonObject = XML.toJSONObject(Utils.getCovData(searchCondition).toString());
 
 		return ResponseEntity.ok(jsonObject.toString());
 	}
