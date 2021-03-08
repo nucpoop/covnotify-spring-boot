@@ -15,7 +15,7 @@ import com.nucpoop.covserver.model.CovData;
 
 public class Utils {
 
-	public static void getResponseXML(StringBuilder sb) {
+	public static CovData getResponseXML(StringBuilder sb) {
 		// CovResponse response = new CovResponse();
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(CovData.class);
@@ -24,8 +24,10 @@ public class Utils {
 			covResponse = (CovData) unmarshaller.unmarshal(new StringReader(sb.toString()));
 
 			covResponse.toString();
+			return covResponse;
 		} catch (Exception e) {
 			// TODO: handle exception
+			return null;
 		}
 	}
 
@@ -91,7 +93,7 @@ public class Utils {
 		rd.close();
 		conn.disconnect();
 
-		getResponseXML(sb);
+		CovData result = getResponseXML(sb);
 		// try {
 		// getNodeListFromXML(sb);
 		// } catch (Exception e) {

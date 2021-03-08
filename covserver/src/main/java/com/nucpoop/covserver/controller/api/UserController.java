@@ -3,10 +3,14 @@ package com.nucpoop.covserver.controller.api;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.json.XML;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,21 +21,28 @@ import com.nucpoop.covserver.service.UserService;
 import com.nucpoop.covserver.util.Utils;
 
 @RestController
+@RequestMapping("/api")
 @MapperScan(basePackages = "com.nucpoop.covserver.dao")
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping("/test")
-	public @ResponseBody String test() throws IOException {
-		JSONObject jsonObject = XML.toJSONObject(Utils.getCovData().toString());
-
-		return jsonObject.toString();
+	@PostMapping("/ip")
+	public ResponseEntity<String> ip (HttpServletRequest request){
+		System.out.println("Ip Request");
+		return ResponseEntity.ok(request.getRemoteAddr());
 	}
 
-	@RequestMapping("/testLocal")
-	public @ResponseBody String testLocal() throws IOException{
+	@RequestMapping("/cov")
+	public ResponseEntity<String> cov() throws IOException {
+		JSONObject jsonObject = XML.toJSONObject(Utils.getCovData().toString());
+
+		return ResponseEntity.ok(jsonObject.toString());
+	}
+
+	@RequestMapping("/covLocal")
+	public @ResponseBody String covLocal() throws IOException{
 		JSONObject jsonObject = XML.toJSONObject(Utils.getCovDataLocal().toString());
 		return jsonObject.toString();
 	}
