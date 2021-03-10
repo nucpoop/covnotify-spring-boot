@@ -3,23 +3,20 @@ package com.nucpoop.covserver.controller.api;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import com.nucpoop.covserver.model.SearchCondition;
+import com.nucpoop.covserver.model.User;
+import com.nucpoop.covserver.service.UserService;
+import com.nucpoop.covserver.util.Utils;
 
 import org.json.JSONObject;
 import org.json.XML;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.nucpoop.covserver.model.SearchCondition;
-import com.nucpoop.covserver.model.User;
-import com.nucpoop.covserver.service.UserService;
-import com.nucpoop.covserver.util.Utils;
 
 @RestController
 @RequestMapping("/api")
@@ -38,8 +35,9 @@ public class UserController {
 	}
 
 	@RequestMapping("/covLocal")
-	public @ResponseBody String covLocal() throws IOException{
-		JSONObject jsonObject = XML.toJSONObject(Utils.getCovDataLocal().toString());
+	public @ResponseBody String covLocal(@RequestParam(value = "date") String date) throws IOException{
+		SearchCondition condition = SearchCondition.builder().pageNo(1).numberOfRows(1).startCreateDt(date).endCreateDt(date).build();
+		JSONObject jsonObject = XML.toJSONObject(Utils.getCovDataLocal(condition).toString());
 		return jsonObject.toString();
 	}
 
