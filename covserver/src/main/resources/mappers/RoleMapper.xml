@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nucpoop.covserver.mapper.RoleMapper">
+
+    <!-- <resultMap type="com.nucpoop.covserver.model.Role" id="Role">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+    </resultMap> -->
+
+    <select id="findByName" parameterType="com.nucpoop.covserver.model.RoleName" resultType="com.nucpoop.covserver.model.Role">
+  	SELECT * FROM roles where name = #{roleName};
+  </select>
+
+</mapper>

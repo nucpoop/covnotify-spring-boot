@@ -1,5 +1,9 @@
 package com.nucpoop.covserver.model;
 
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,67 +16,27 @@ import lombok.ToString;
 @Builder
 @ToString
 public class User {
-    private int id;
-    private String user_id;
-    private String user_passwd;
-    private String user_name;
-    private String user_phone;
-    private String user_email;
+    private Long id;
+    private String email;
+    private String password;
+    private String notifyYn ="Ns";
+    private String location;
+    private String notifyTime;
+    private Set<Role> roles = new HashSet<>();
+    private Instant createdAt;
+    private Instant updatedAt;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public User(Long id, String email, String password, String notifyYn, String location, String notifyTime,
+            Set<Role> roles, Instant createdAt, Instant updatedAt) {
         this.id = id;
+        this.email = email;
+        this.password = password;
+        this.notifyYn = notifyYn;
+        this.location = location;
+        this.notifyTime = notifyTime;
+        this.roles = roles;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public String getUserID() {
-        return user_id;
-    }
-
-    public void setUserID(String userID) {
-        this.user_id = userID;
-    }
-
-    public String getUserPasswd() {
-        return user_passwd;
-    }
-
-    public void setUserPasswd(String userPasswd) {
-        this.user_passwd = userPasswd;
-    }
-
-    public String getUserName() {
-        return user_name;
-    }
-
-    public void setUserName(String userName) {
-        this.user_name = userName;
-    }
-
-    public String getUserPhone() {
-        return user_phone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.user_phone = userPhone;
-    }
-
-    public String getUserEmail() {
-        return user_email;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.user_email = userEmail;
-    }
-
-    public User(int id, String user_id, String user_passwd, String user_name, String user_phone, String user_email) {
-        this.id = id;
-        this.user_id = user_id;
-        this.user_passwd = user_passwd;
-        this.user_name = user_name;
-        this.user_phone = user_phone;
-        this.user_email = user_email;
-    }
 }

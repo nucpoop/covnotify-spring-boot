@@ -18,9 +18,17 @@
 
 
   <insert id="insertUser" parameterType="com.nucpoop.covserver.model.User">
-    insert into user_temp(user_id, user_passwd, user_name, user_phone, user_email)
+    insert into users(created_at, updated_at, email,notify_yn,password)
     values
-    (#{user_id}, #{user_passwd}, #{user_name}, #{user_phone}, #{user_email})
+    (now(),now(), #{email}, #{notifyYn},#{password})
   </insert>
+
+  <select id="findByEmail" resultType="com.nucpoop.covserver.model.User">
+    select * from users where email = #{email}
+  </select>
+
+  <select id="findById" resultType="com.nucpoop.covserver.model.User">
+    select * from users where id = #{id}
+  </select>
 
 </mapper>
