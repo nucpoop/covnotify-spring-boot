@@ -69,13 +69,14 @@ public class UserController {
 
 	@GetMapping("/me")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername());
+		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(),
+				currentUser.getNotifyYn(), currentUser.getLocation(), currentUser.getNotifyTime());
 		return userSummary;
 	}
 
 	@GetMapping("/checkEmail")
-	public UserEmailCheck getAvailabilityEmail(@RequestParam(value = "email") String email){
-		
+	public UserEmailCheck getAvailabilityEmail(@RequestParam(value = "email") String email) {
+
 		UserEmailCheck check = new UserEmailCheck(false);
 
 		try {
@@ -83,7 +84,7 @@ public class UserController {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
+
 		return check;
 	}
 
@@ -100,17 +101,18 @@ public class UserController {
 	}
 
 	@RequestMapping("/signup")
-	public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest){
-		
+	public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+
 		// if (userService.existsByEmail(signUpRequest.getEmail())) {
-		// 	return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
+		// return new ResponseEntity(new ApiResponse(false, "Email Address already in
+		// use!"), HttpStatus.BAD_REQUEST);
 		// }
 
 		User user = User.builder().email(signUpRequest.getEmail()).password(signUpRequest.getPassword()).build();
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		Role userRole = roleMapper.findByName(RoleName.ROLE_USER);
-				//.orElseThrow(() -> new AppException("User Role not set."));
+		// .orElseThrow(() -> new AppException("User Role not set."));
 		user.setRoles(Collections.singleton(userRole));
 
 		try {
