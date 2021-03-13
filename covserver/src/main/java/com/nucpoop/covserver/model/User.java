@@ -19,7 +19,7 @@ public class User {
     private Long id;
     private String email;
     private String password;
-    private String notifyYn ="Ns";
+    private String notifyYn;
     private String location;
     private String notifyTime;
     private Set<Role> roles = new HashSet<>();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.nucpoop.covserver.mapper.UserMapper;
 import com.nucpoop.covserver.model.User;
+import com.nucpoop.covserver.model.UserEmailCheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,19 @@ public class UserServiceImpl implements UserService{
     public User selectUserByID(String id) throws Exception{
         User user = userMapper.selectUserByID(id);
         return user;
+    }
+
+    @Override
+    public UserEmailCheck checkEmail(String email) throws Exception {
+        User user = userMapper.findByEmail(email);
+        UserEmailCheck result = new UserEmailCheck(false);
+
+        if(user == null){
+            result.setCanEmailSignUp(true);    
+        }else{
+            result.setCanEmailSignUp(false);
+        }
+
+        return result;
     }
 }

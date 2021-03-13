@@ -12,6 +12,7 @@ import com.nucpoop.covserver.model.Role;
 import com.nucpoop.covserver.model.RoleName;
 import com.nucpoop.covserver.model.SignUpRequest;
 import com.nucpoop.covserver.model.User;
+import com.nucpoop.covserver.model.UserEmailCheck;
 import com.nucpoop.covserver.model.UserSummary;
 import com.nucpoop.covserver.security.CurrentUser;
 import com.nucpoop.covserver.security.JwtTokenProvider;
@@ -21,7 +22,6 @@ import com.nucpoop.covserver.service.UserService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -73,6 +73,20 @@ public class UserController {
 		return userSummary;
 	}
 
+	@GetMapping("/checkEmail")
+	public UserEmailCheck getAvailabilityEmail(@RequestParam(value = "email") String email){
+		
+		UserEmailCheck check = new UserEmailCheck(false);
+
+		try {
+			check = userService.checkEmail(email);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return check;
+	}
+
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
@@ -92,15 +106,11 @@ public class UserController {
 		// 	return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
 		// }
 
-		// Creating user's account
 		User user = User.builder().email(signUpRequest.getEmail()).password(signUpRequest.getPassword()).build();
 
-
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
 		Role userRole = roleMapper.findByName(RoleName.ROLE_USER);
 				//.orElseThrow(() -> new AppException("User Role not set."));
-
 		user.setRoles(Collections.singleton(userRole));
 
 		try {
@@ -108,25 +118,10 @@ public class UserController {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		
-		//User result = userRepository.save(user);
-		//User result = user;
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{email}")
 				.buildAndExpand(user.getEmail()).toUri();
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
-
-	// @RequestMapping("/user_insert")
-	// public int userInsert(@RequestParam(value = "userID") String id, @RequestParam(value = "userPasswd") String passwd,
-	// 		@RequestParam(value = "userName") String name, @RequestParam(value = "userPhone") String phone,
-	// 		@RequestParam(value = "userEmail") String email) throws Exception {
-	// 	int result;		
-	// 	User user = User.builder()
-	// 	.userID(id).userPasswd(passwd).userName(name).userPhone(phone).userEmail(email)
-	// 			.build();
-	// 	result = userService.insertUser(user);
-	// 	return result;
-	// }
 }
