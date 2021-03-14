@@ -52,4 +52,9 @@ public class UserServiceImpl implements UserService{
 
         return result;
     }
+
+    @Override
+    public int updatePassword(String password) throws Exception {
+        return userMapper.updatePassword(password);
+    }
 }

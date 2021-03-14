@@ -15,4 +15,5 @@ public interface UserMapper {
     int insertUser(User user) throws Exception;
     User findByEmail(String email) throws Exception;
     User findById(Long id) throws Exception;
+    int updatePassword(String password) throws Exception;
 }

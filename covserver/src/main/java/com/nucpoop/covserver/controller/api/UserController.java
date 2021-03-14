@@ -6,8 +6,11 @@ import java.util.List;
 
 import com.nucpoop.covserver.mapper.RoleMapper;
 import com.nucpoop.covserver.model.ApiResponse;
+import com.nucpoop.covserver.model.EmailRequest;
 import com.nucpoop.covserver.model.JwtAuthenticationResponse;
+import com.nucpoop.covserver.model.LocationTimeRequest;
 import com.nucpoop.covserver.model.LoginRequest;
+import com.nucpoop.covserver.model.PasswordRequest;
 import com.nucpoop.covserver.model.Role;
 import com.nucpoop.covserver.model.RoleName;
 import com.nucpoop.covserver.model.SignUpRequest;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -55,18 +59,6 @@ public class UserController {
 	@Autowired
 	JwtTokenProvider tokenProvider;
 
-	@RequestMapping("/getUsers")
-	public List<User> users() throws Exception {
-		List<User> userList = userService.selectUsers();
-		return userList;
-	}
-
-	@RequestMapping("/findbyid")
-	public User userByID(@RequestParam(value = "id") int id) throws Exception {
-		User user = userService.selectUserByIndex(id);
-		return user;
-	}
-
 	@GetMapping("/me")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
 		UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(),
@@ -88,6 +80,34 @@ public class UserController {
 		return check;
 	}
 
+	@PostMapping("/resetPassword")
+	public ResponseEntity<?> resetPassword(@RequestBody EmailRequest emailRequest) {
+
+
+		return ResponseEntity.ok(new ApiResponse(true, "Success Password Reset"));
+	}
+
+	@PostMapping("/updatePassword")
+	public ResponseEntity<?> updatePassword(@RequestBody PasswordRequest passwordRequest) {
+		String password = passwordEncoder.encode(passwordRequest.getPassword());
+
+		try {
+			int result = userService.updatePassword(password);
+			if (result == 1) {
+				return ResponseEntity.ok(new ApiResponse(true, "Success Password Update"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Something Wrong"));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
+	}
+
+	@PostMapping("/updateLocationAndTime")
+	public ResponseEntity<?> updateLocationAndTime(@RequestBody LocationTimeRequest locationTimeRequest) {
+		return ResponseEntity.ok(new ApiResponse(true, "Success Update"));
+	}
+
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
@@ -103,16 +123,10 @@ public class UserController {
 	@RequestMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
 
-		// if (userService.existsByEmail(signUpRequest.getEmail())) {
-		// return new ResponseEntity(new ApiResponse(false, "Email Address already in
-		// use!"), HttpStatus.BAD_REQUEST);
-		// }
-
 		User user = User.builder().email(signUpRequest.getEmail()).password(signUpRequest.getPassword()).build();
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		Role userRole = roleMapper.findByName(RoleName.ROLE_USER);
-		// .orElseThrow(() -> new AppException("User Role not set."));
 		user.setRoles(Collections.singleton(userRole));
 
 		try {

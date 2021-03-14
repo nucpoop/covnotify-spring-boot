@@ -12,4 +12,5 @@ public interface UserService {
     int insertUser(User user) throws Exception ;  
     User selectUserByID(String id) throws Exception;
     UserEmailCheck checkEmail(String email) throws Exception;
+    int updatePassword(String password) throws Exception;
 }
