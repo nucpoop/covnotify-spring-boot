@@ -26,11 +26,11 @@
   </update>
 
   <update id="updateLocation" parameterType="com.nucpoop.covserver.model.User">
-    update users set location = #{location} where email = #{email}
+    update users set location = #{location}, updated_at = now() where email = #{email}
   </update>
 
-  <update id="updateNotify" parameterType="com.nucpoop.covserver.model.User">
-    udate users set notify_yn = #{notifyYn}, notify_time = #{notifyTime} where email = #{email}
+  <update id="updateNofity" parameterType="com.nucpoop.covserver.model.User">
+    update users set notify_yn = #{notifyYn}, notify_time = #{notifyTime}, updated_at = now() where email = #{email}
   </update>
 
   <delete id="deleteUser" parameterType="com.nucpoop.covserver.model.User">

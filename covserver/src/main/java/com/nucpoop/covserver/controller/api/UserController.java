@@ -7,7 +7,9 @@ import com.nucpoop.covserver.mapper.RoleMapper;
 import com.nucpoop.covserver.model.ApiResponse;
 import com.nucpoop.covserver.model.EmailRequest;
 import com.nucpoop.covserver.model.JwtAuthenticationResponse;
+import com.nucpoop.covserver.model.LocationRequest;
 import com.nucpoop.covserver.model.LoginRequest;
+import com.nucpoop.covserver.model.NotifyRequest;
 import com.nucpoop.covserver.model.PasswordRequest;
 import com.nucpoop.covserver.model.Role;
 import com.nucpoop.covserver.model.RoleName;
@@ -165,5 +167,39 @@ public class UserController {
 				.buildAndExpand(user.getEmail()).toUri();
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+	}
+
+	@PostMapping("/updateLocation")
+	public ResponseEntity<?> updateLocation(@CurrentUser UserPrincipal currentUser,
+			@RequestBody LocationRequest locationRequest) {
+		try {
+			User user = User.builder().email(currentUser.getUsername()).location(locationRequest.getLocation()).build();
+			int result = userService.updateLocation(user);
+
+			if (result == 1) {
+				return ResponseEntity.ok(new ApiResponse(true, "Success Location Update"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Fail to update location"));
+			}
+
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
+	}
+
+	@PostMapping("/updateNotify")
+	public ResponseEntity<?> updateNotify(@CurrentUser UserPrincipal currentUser,@RequestBody NotifyRequest notifyRequest){
+		try {
+			User user = User.builder().email(currentUser.getUsername()).notifyYn(notifyRequest.getNotifyYn()).notifyTime(notifyRequest.getNotifyTime()).build();
+			int result = userService.updateNotify(user);
+
+			if (result == 1) {
+				return ResponseEntity.ok(new ApiResponse(true, "Success Notify Update"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Fail to update notify"));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
 	}
 }
