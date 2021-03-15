@@ -44,7 +44,7 @@ class CovserverApplicationTests {
 		Utils util = new Utils();
 		assertNull(util);
 		try {
-			Utils.sendEmail("kjm5546@gmail.com","test","안녕하세요");   
+			//Utils.sendEmail("kjm5546@gmail.com","test","안녕하세요");   
 		} catch (Exception e) {
 			
 		}

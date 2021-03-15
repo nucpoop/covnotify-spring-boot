@@ -5,12 +5,20 @@ import java.util.List;
 import com.nucpoop.covserver.model.User;
 import com.nucpoop.covserver.model.UserEmailCheck;
 
-
 public interface UserService {
-    List<User> selectUsers() throws Exception ;
-    User selectUserByIndex(int index) throws Exception ;
-    int insertUser(User user) throws Exception ;  
-    User selectUserByID(String id) throws Exception;
+    int insertUser(User user) throws Exception;
+
     UserEmailCheck checkEmail(String email) throws Exception;
-    int updatePassword(String password) throws Exception;
+
+    int updatePassword(User password) throws Exception;
+
+    int resetPassword(User user) throws Exception;
+
+    int withdrawalUser(User user) throws Exception;
+
+    List<User> selectUsersForNotify(String time) throws Exception;
+
+    int updateLocation(User user) throws Exception;
+
+    int updateNotify(User user) throws Exception;
 }

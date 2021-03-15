@@ -2,13 +2,11 @@ package com.nucpoop.covserver.controller.api;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.List;
 
 import com.nucpoop.covserver.mapper.RoleMapper;
 import com.nucpoop.covserver.model.ApiResponse;
 import com.nucpoop.covserver.model.EmailRequest;
 import com.nucpoop.covserver.model.JwtAuthenticationResponse;
-import com.nucpoop.covserver.model.LocationTimeRequest;
 import com.nucpoop.covserver.model.LoginRequest;
 import com.nucpoop.covserver.model.PasswordRequest;
 import com.nucpoop.covserver.model.Role;
@@ -21,6 +19,7 @@ import com.nucpoop.covserver.security.CurrentUser;
 import com.nucpoop.covserver.security.JwtTokenProvider;
 import com.nucpoop.covserver.security.UserPrincipal;
 import com.nucpoop.covserver.service.UserService;
+import com.nucpoop.covserver.util.EmailUtilImpl;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,6 +41,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api/user")
 @MapperScan(basePackages = "com.nucpoop.covserver.dao")
 public class UserController {
+
+	@Autowired
+	EmailUtilImpl emailUtil;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -80,19 +81,49 @@ public class UserController {
 		return check;
 	}
 
+	@PostMapping("/withdrawal")
+	public ResponseEntity<?> withdrawalUser(@CurrentUser UserPrincipal currentUser,
+			@RequestBody PasswordRequest passwordRequest) {
+		String password = passwordEncoder.encode(passwordRequest.getPassword());
+		User user = User.builder().email(currentUser.getUsername()).password(password).build();
+
+		try {
+			int result = userService.withdrawalUser(user);
+			if (result == 1) {
+				return ResponseEntity.ok(new ApiResponse(true, "Success withdrawal"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Fail to withdrawal"));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
+	}
+
 	@PostMapping("/resetPassword")
 	public ResponseEntity<?> resetPassword(@RequestBody EmailRequest emailRequest) {
+		User user = User.builder().email(emailRequest.getEmail()).build();
+		try {
+			int password = userService.resetPassword(user);
+			if (password != 0) {
+				emailUtil.sendEmail(emailRequest.getEmail(), "Covid Notify 비밀번호 초기화", "초기화된 비밀번호 : " + password);
 
-
-		return ResponseEntity.ok(new ApiResponse(true, "Success Password Reset"));
+				return ResponseEntity.ok(new ApiResponse(true, "Success Password Reset"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Fail to reset"));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
 	}
 
 	@PostMapping("/updatePassword")
-	public ResponseEntity<?> updatePassword(@RequestBody PasswordRequest passwordRequest) {
+	public ResponseEntity<?> updatePassword(@CurrentUser UserPrincipal currentUser,
+			@RequestBody PasswordRequest passwordRequest) {
 		String password = passwordEncoder.encode(passwordRequest.getPassword());
+		User user = User.builder().password(password).email(currentUser.getUsername()).build();
 
 		try {
-			int result = userService.updatePassword(password);
+			int result = userService.updatePassword(user);
 			if (result == 1) {
 				return ResponseEntity.ok(new ApiResponse(true, "Success Password Update"));
 			} else {
@@ -101,11 +132,6 @@ public class UserController {
 		} catch (Exception e) {
 			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
 		}
-	}
-
-	@PostMapping("/updateLocationAndTime")
-	public ResponseEntity<?> updateLocationAndTime(@RequestBody LocationTimeRequest locationTimeRequest) {
-		return ResponseEntity.ok(new ApiResponse(true, "Success Update"));
 	}
 
 	@PostMapping("/signin")
