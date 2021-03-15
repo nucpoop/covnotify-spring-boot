@@ -18,7 +18,7 @@
   </select>
 
   <select id="notifyEmail" parameterType="String" resultType="com.nucpoop.covserver.model.User">
-    select email, location from users where notify_time = #{time}
+    select email, location from users where notify_time = #{time} and notify_yn = 'Y'
   </select>
 
   <update id="updatePassword" parameterType="com.nucpoop.covserver.model.User">

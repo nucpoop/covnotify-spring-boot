@@ -1,76 +1,77 @@
 package com.example.demo;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import com.nucpoop.covserver.CovserverApplication;
+import com.nucpoop.covserver.model.SearchCondition;
+import com.nucpoop.covserver.model.User;
+import com.nucpoop.covserver.model.covdata.CovData;
+import com.nucpoop.covserver.model.covdata.Item;
+import com.nucpoop.covserver.service.UserService;
+import com.nucpoop.covserver.util.EmailUtil;
 import com.nucpoop.covserver.util.Utils;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
-
 @RunWith(SpringRunner.class)
-//@SpringBootTest(classes = CovserverApplication.class)
-@SpringBootTest(classes = CovserverApplication.class,args = "-Djasypt.encryptor.password=jamjam")
+@SpringBootTest(classes = CovserverApplication.class)
 class CovserverApplicationTests {
 
+	static {
+		System.setProperty("jasypt.encryptor.password", "jamjam");
+	}
 	@Autowired
 	private DataSource dataSource;
 
-	//@Test
-	// public void testConnection() {
+	@Autowired
+	private EmailUtil emailUtil;
 
-	// 	try (Connection conn = dataSource.getConnection()) {
-	// 		System.out.println("db connection success " + conn);
-
-	// 	} catch (Exception e) {
-	// 		System.out.println("db connection fail");
-	// 		e.printStackTrace();
-	// 	}
-
-	// }
+	@Autowired
+	private UserService userService;
 
 	@Test
-	public void testSendMail(){
+	public void testSendMail() {
 		Utils util = new Utils();
-		assertNull(util);
+		assertNotNull(util);
 		try {
-			//Utils.sendEmail("kjm5546@gmail.com","test","안녕하세요");   
+			emailUtil.sendEmail("kjm5546@gmail.com", "코로나 알림", "전국\n확진자:1111\n완치:1111\n사망:1111");
+			// Utils.sendEmail("kjm5546@gmail.com","test","안녕하세요");
 		} catch (Exception e) {
-			
+
 		}
 	}
 
-	// @Test
-	// public void testGetCov(){
-	// 	try {
-	// 		//System.out.println(Utils.getCovData().toString());	
-	// 	} catch (Exception e) {
-	// 		//TODO: handle exception
-	// 	}
-		
-	// }
+	@Test
+	public void testCalDate() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = new Date();
+		String dateComplete = simpleDateFormat.format(date);
+		System.out.println(dateComplete);
 
-	// @Test
-	// public void encryptionTest(){
-	// 	StandardPBEStringEncryptor jasypt = new StandardPBEStringEncryptor();
-    //     jasypt.setPassword("test");
-    //     jasypt.setAlgorithm("PBEWithMD5AndDES");
- 
- 
-    //     String encryptedText = jasypt.encrypt("test");
-    //     String plainText = jasypt.decrypt(encryptedText);
- 
-    //     System.out.println("encryptedText:  " + encryptedText);
-    //     System.out.println("plainText:  " + plainText);
-	// }
+		SearchCondition searchCondition = SearchCondition.builder().pageNo(1).numberOfRows(1).startCreateDt("20210315")
+				.endCreateDt("20210315").build();
+		try {
+			Utils.getCovData(searchCondition);
+			CovData covData = Utils.getCovData();
+			Item item = covData.getBody().getItems().get(0);
+			List<User> users = userService.selectUsersForNotify("11");
+			for (User user : users) {
+				String data = "코로나 정보\n 확진자 : " + item.getDecideCnt() + "명\n 격리해제 : " + item.getClearCnt()
+						+ "명\n 치료중 : " + item.getCareCnt() + "명\n 사망자 : " + item.getDeathCnt() +"명";
+				emailUtil.sendEmail(user.getEmail(), "20210315 코로나 알림", data);
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+	}
 }

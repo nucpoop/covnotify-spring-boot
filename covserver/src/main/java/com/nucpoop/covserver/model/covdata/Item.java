@@ -1,43 +1,13 @@
-package com.nucpoop.covserver.model;
-
-import java.util.List;
+package com.nucpoop.covserver.model.covdata;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "response")
-public class CovData {
-    @XmlElement
-    Header header;
-    @XmlElement
-    Body body;
+import lombok.Getter;
 
-}
-
+@Getter
 @XmlRootElement
-class Header {
-    @XmlElement
-    int resultCode;
-    @XmlElement
-    String resultMsg;
-}
-
-@XmlRootElement
-class Body {
-    @XmlElementWrapper(name = "items")
-    @XmlElement(name = "item")
-    List<Item> items;
-    @XmlElement
-    int numOfRows;
-    @XmlElement
-    int pageNo;
-    @XmlElement
-    int totalCount;
-}
-
-@XmlRootElement
-class Item {
+public class Item {
     @XmlElement
     double accDefRate;
     @XmlElement

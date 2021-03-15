@@ -11,10 +11,13 @@ import java.net.URLEncoder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import com.nucpoop.covserver.model.CovData;
+import com.nucpoop.covserver.model.covdata.CovData;
 import com.nucpoop.covserver.model.SearchCondition;
 
 public class Utils {
+	
+
+	private static CovData covData;
 
 	public static CovData getResponseXML(StringBuilder sb) {
 		try {
@@ -68,7 +71,7 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-		getResponseXML(sb);
+		covData = getResponseXML(sb);
 		return sb;
 	}
 
@@ -110,5 +113,9 @@ public class Utils {
 		conn.disconnect();
 		getResponseXML(sb);
 		return sb;
+	}
+
+	public static CovData getCovData(){
+		return covData;
 	}
 }
