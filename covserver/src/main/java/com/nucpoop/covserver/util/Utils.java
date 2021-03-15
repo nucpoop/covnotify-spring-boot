@@ -14,6 +14,11 @@ import javax.xml.bind.Unmarshaller;
 import com.nucpoop.covserver.model.CovData;
 import com.nucpoop.covserver.model.SearchCondition;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
+
 public class Utils {
 
 	public static CovData getResponseXML(StringBuilder sb) {
@@ -113,8 +118,8 @@ public class Utils {
 		urlBuilder.append("?" + URLEncoder.encode("ServiceKey", ENCODING) + "=" + SERVICE_KEY); /* Service Key */
 		urlBuilder.append("&" + URLEncoder.encode("ServiceKey", ENCODING) + "="
 				+ URLEncoder.encode("-", ENCODING)); /* 공공데이터포털에서 받은 인증키 */
-		urlBuilder.append(
-				"&" + URLEncoder.encode(condition.getPageNo() + "", ENCODING) + "=" + URLEncoder.encode("1", ENCODING)); /* 페이지번호 */
+		urlBuilder.append("&" + URLEncoder.encode(condition.getPageNo() + "", ENCODING) + "="
+				+ URLEncoder.encode("1", ENCODING)); /* 페이지번호 */
 		urlBuilder.append("&" + URLEncoder.encode("numOfRows", ENCODING) + "="
 				+ URLEncoder.encode(condition.getNumberOfRows() + "", ENCODING)); /* 한 페이지 결과 수 */
 		urlBuilder.append("&" + URLEncoder.encode("startCreateDt", ENCODING) + "="
