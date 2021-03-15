@@ -14,15 +14,9 @@ import javax.xml.bind.Unmarshaller;
 import com.nucpoop.covserver.model.CovData;
 import com.nucpoop.covserver.model.SearchCondition;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
-
 public class Utils {
 
 	public static CovData getResponseXML(StringBuilder sb) {
-		// CovResponse response = new CovResponse();
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(CovData.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -32,33 +26,9 @@ public class Utils {
 			covResponse.toString();
 			return covResponse;
 		} catch (Exception e) {
-			// TODO: handle exception
 			return null;
 		}
 	}
-
-	// public static void getNodeListFromXML(StringBuilder sb)
-	// throws ParserConfigurationException, SAXException, IOException {
-	// DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	// DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-
-	// Xml to NodeList
-	// Document document = documentBuilder.parse(new InputSource(new
-	// StringReader(sb.toString())));
-
-	// Element root = document.getDocumentElement();
-
-	// NodeList children = root.getChildNodes();
-	// for (int i = 0; i < children.getLength(); i++) {
-	// Node node = children.item(i);
-	// if(node.getNodeType() == Node.ELEMENT_NODE) {
-	// Element element = (Element)node;
-	// String nodeName = element.getNodeName();
-
-	// }
-	// }
-
-	// }
 
 	public static StringBuilder getCovData(SearchCondition condition) throws IOException {
 
@@ -98,13 +68,7 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-
-		CovData result = getResponseXML(sb);
-		// try {
-		// getNodeListFromXML(sb);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
+		getResponseXML(sb);
 		return sb;
 	}
 
@@ -147,5 +111,4 @@ public class Utils {
 		getResponseXML(sb);
 		return sb;
 	}
-
 }
