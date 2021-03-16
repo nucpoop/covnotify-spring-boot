@@ -7,11 +7,11 @@ import lombok.Getter;
 
 @Getter
 @XmlRootElement(name = "response")
-public class CovData {
+public class CovDataLocal {
     @XmlElement
     Header header;
     @XmlElement
-    Body body;
+    BodyLocal body;
 
 }
 

@@ -12,12 +12,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import com.nucpoop.covserver.model.covdata.CovData;
+import com.nucpoop.covserver.model.covdata.CovDataLocal;
 import com.nucpoop.covserver.model.SearchCondition;
 
 public class Utils {
 	
 
 	private static CovData covData;
+	private static CovDataLocal covDataLocal;
 
 	public static CovData getResponseXML(StringBuilder sb) {
 		try {
@@ -25,6 +27,20 @@ public class Utils {
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			CovData covResponse;
 			covResponse = (CovData) unmarshaller.unmarshal(new StringReader(sb.toString()));
+
+			covResponse.toString();
+			return covResponse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static CovDataLocal getLocalResponseXML(StringBuilder sb) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(CovDataLocal.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			CovDataLocal covResponse;
+			covResponse = (CovDataLocal) unmarshaller.unmarshal(new StringReader(sb.toString()));
 
 			covResponse.toString();
 			return covResponse;
@@ -111,11 +127,15 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-		getResponseXML(sb);
+		covDataLocal = getLocalResponseXML(sb);
 		return sb;
 	}
 
 	public static CovData getCovData(){
 		return covData;
+	}
+
+	public static CovDataLocal getCovDataLocal(){
+		return covDataLocal;
 	}
 }

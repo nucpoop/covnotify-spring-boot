@@ -12,7 +12,9 @@ import com.nucpoop.covserver.CovserverApplication;
 import com.nucpoop.covserver.model.SearchCondition;
 import com.nucpoop.covserver.model.User;
 import com.nucpoop.covserver.model.covdata.CovData;
+import com.nucpoop.covserver.model.covdata.CovDataLocal;
 import com.nucpoop.covserver.model.covdata.Item;
+import com.nucpoop.covserver.model.covdata.ItemLocal;
 import com.nucpoop.covserver.service.UserService;
 import com.nucpoop.covserver.util.EmailUtil;
 import com.nucpoop.covserver.util.Utils;
@@ -67,11 +69,54 @@ class CovserverApplicationTests {
 			List<User> users = userService.selectUsersForNotify("11");
 			for (User user : users) {
 				String data = "코로나 정보\n 확진자 : " + item.getDecideCnt() + "명\n 격리해제 : " + item.getClearCnt()
-						+ "명\n 치료중 : " + item.getCareCnt() + "명\n 사망자 : " + item.getDeathCnt() +"명";
+						+ "명\n 치료중 : " + item.getCareCnt() + "명\n 사망자 : " + item.getDeathCnt() + "명";
 				emailUtil.sendEmail(user.getEmail(), "20210315 코로나 알림", data);
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
+		}
+	}
+
+	@Test
+	public void testCovLocalData() {
+		SearchCondition searchCondition = SearchCondition.builder().pageNo(1).numberOfRows(1).startCreateDt("20210316")
+				.endCreateDt("20210316").build();
+		try {
+			Utils.getCovData(searchCondition);
+			CovData covData = Utils.getCovData();
+			Item global = covData.getBody().getItems().get(0);
+
+			Utils.getCovDataLocal(searchCondition);
+			CovDataLocal covDataLocal = Utils.getCovDataLocal();
+			List<ItemLocal> items = covDataLocal.getBody().getItems();
+
+			List<User> users = userService.selectUsersForNotify("11");
+
+			for (User user : users) {
+				String dataGlobal = "<전국 코로나 정보>\n확진자 : " +global.getDecideCnt()
+                +"명\n격리해제 : " + global.getClearCnt()
+                +"명\n치료중 : " + global.getCareCnt()
+                +"명\n사망자 : " + global.getDeathCnt()
+				+"명\n\n";
+
+				String dataLocal = "";
+				for (ItemLocal item : items) {
+					
+					if(user.getLocation().equals(item.getGubun())){
+						dataLocal ="<" + user.getLocation() +"지역 코로나 정보>\n확진자 : " +item.getDefCnt()
+						+"명\n격리해제 : " + item.getIsolClearCnt()
+						+"명\n치료중 : " + item.getIsolIngCnt()
+						+"명\n사망자 : " + item.getDeathCnt()
+						+"명\n전일대비 증감 수 : " + item.getIncDec()
+						+"명\n\n";
+						break;
+					}
+				}
+				emailUtil.sendEmail(user.getEmail(), "20210316 코로나 알림", dataGlobal + dataLocal);
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			testCovLocalData();
 		}
 	}
 }
