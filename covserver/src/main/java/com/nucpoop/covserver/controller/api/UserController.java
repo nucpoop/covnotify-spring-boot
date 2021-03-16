@@ -31,6 +31,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,7 +84,7 @@ public class UserController {
 		return check;
 	}
 
-	@PostMapping("/withdrawal")
+	@DeleteMapping("/withdrawal")
 	public ResponseEntity<?> withdrawalUser(@CurrentUser UserPrincipal currentUser,
 			@RequestBody PasswordRequest passwordRequest) {
 		String password = passwordEncoder.encode(passwordRequest.getPassword());
@@ -92,9 +93,9 @@ public class UserController {
 		try {
 			int result = userService.withdrawalUser(user);
 			if (result == 1) {
-				return ResponseEntity.ok(new ApiResponse(true, "Success withdrawal"));
+				return ResponseEntity.ok(new ApiResponse(true, "정상적으로 탈퇴가 되었습니다."));
 			} else {
-				return ResponseEntity.ok(new ApiResponse(false, "Fail to withdrawal"));
+				return ResponseEntity.ok(new ApiResponse(false, "비밀번호가 틀렸습니다."));
 			}
 		} catch (Exception e) {
 			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
