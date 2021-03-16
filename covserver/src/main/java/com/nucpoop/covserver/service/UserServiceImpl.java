@@ -47,8 +47,9 @@ public class UserServiceImpl implements UserService {
         User compare = userMapper.findByEmail(user.getEmail());
         if(passwordEncoder.matches(user.getPassword(), compare.getPassword())){
             return userMapper.deleteUser(user);
-        }
+        }else{
             return 0;
+        } 
     }
 
     @Override
