@@ -42,8 +42,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public int withdrawalUser(User user) throws Exception {
-        return userMapper.deleteUser(user);
+        User compare = userMapper.findByEmail(user.getEmail());
+        if(passwordEncoder.matches(user.getPassword(), compare.getPassword())){
+            return userMapper.deleteUser(user);
+        }
+            return 0;
     }
 
     @Override

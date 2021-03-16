@@ -34,7 +34,7 @@
   </update>
 
   <delete id="deleteUser" parameterType="com.nucpoop.covserver.model.User">
-    delete from users where email = #{email} and password = #{password}
+    delete from users where email = #{email}
   </delete>
 
 </mapper>

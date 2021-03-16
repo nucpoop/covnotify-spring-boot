@@ -87,8 +87,8 @@ public class UserController {
 	@DeleteMapping("/withdrawal")
 	public ResponseEntity<?> withdrawalUser(@CurrentUser UserPrincipal currentUser,
 			@RequestBody PasswordRequest passwordRequest) {
-		String password = passwordEncoder.encode(passwordRequest.getPassword());
-		User user = User.builder().email(currentUser.getUsername()).password(password).build();
+		//String password = passwordEncoder.encode(passwordRequest.getPassword());
+		User user = User.builder().email(currentUser.getUsername()).password(passwordRequest.getPassword()).build();
 
 		try {
 			int result = userService.withdrawalUser(user);
