@@ -17,6 +17,7 @@ import com.nucpoop.covserver.model.SignUpRequest;
 import com.nucpoop.covserver.model.User;
 import com.nucpoop.covserver.model.UserEmailCheck;
 import com.nucpoop.covserver.model.UserSummary;
+import com.nucpoop.covserver.model.UserUpdateRequest;
 import com.nucpoop.covserver.security.CurrentUser;
 import com.nucpoop.covserver.security.JwtTokenProvider;
 import com.nucpoop.covserver.security.UserPrincipal;
@@ -122,19 +123,25 @@ public class UserController {
 	@PostMapping("/updatePassword")
 	public ResponseEntity<?> updatePassword(@CurrentUser UserPrincipal currentUser,
 			@RequestBody PasswordRequest passwordRequest) {
-		String password = passwordEncoder.encode(passwordRequest.getPassword());
-		User user = User.builder().password(password).email(currentUser.getUsername()).build();
 
-		try {
-			int result = userService.updatePassword(user);
-			if (result == 1) {
-				return ResponseEntity.ok(new ApiResponse(true, "Success Password Update"));
-			} else {
-				return ResponseEntity.ok(new ApiResponse(false, "Something Wrong"));
+		if(passwordEncoder.matches(passwordRequest.getPassword(),currentUser.getPassword() )){
+			String password = passwordEncoder.encode(passwordRequest.getNewPassword());
+			User user = User.builder().password(password).email(currentUser.getUsername()).build();
+	
+			try {
+				int result = userService.updatePassword(user);
+				if (result == 1) {
+					return ResponseEntity.ok(new ApiResponse(true, "Success Password Update"));
+				} else {
+					return ResponseEntity.ok(new ApiResponse(false, "Something Wrong"));
+				}
+			} catch (Exception e) {
+				return ResponseEntity.ok(new ApiResponse(false, e.toString()));
 			}
-		} catch (Exception e) {
-			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
-		}
+		}else{
+			return ResponseEntity.ok(new ApiResponse(false, "비밀번호가 일치하지 않습니다."));
+		}		
+		
 	}
 
 	@PostMapping("/signin")
@@ -198,6 +205,22 @@ public class UserController {
 				return ResponseEntity.ok(new ApiResponse(true, "Success Notify Update"));
 			} else {
 				return ResponseEntity.ok(new ApiResponse(false, "Fail to update notify"));
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse(false, e.toString()));
+		}
+	}
+
+	@PostMapping("/updateUser")
+	public ResponseEntity<?> updateUser(@CurrentUser UserPrincipal currentUser,@ RequestBody UserUpdateRequest userUpdateRequest){
+		try {
+			User user = User.builder().password(userUpdateRequest.getPassword()).location(userUpdateRequest.getLocation()).email(currentUser.getUsername()).build();
+			int result = userService.updateUserInfo(user);
+
+			if (result == 1) {
+				return ResponseEntity.ok(new ApiResponse(true, "Success user update"));
+			} else {
+				return ResponseEntity.ok(new ApiResponse(false, "Fail to update user"));
 			}
 		} catch (Exception e) {
 			return ResponseEntity.ok(new ApiResponse(false, e.toString()));

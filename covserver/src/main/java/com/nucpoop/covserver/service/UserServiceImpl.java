@@ -88,4 +88,14 @@ public class UserServiceImpl implements UserService {
     public int updateNotify(User user) throws Exception {
         return userMapper.updateNofity(user);
     }
+
+    @Override
+    @Transactional
+    public int updateUserInfo(User user) throws Exception{
+        String password = passwordEncoder.encode(user.getPassword());
+
+        userMapper.updateLocation(user);
+        user.setPassword(password);
+        return userMapper.updatePassword(user);
+    }
 }

@@ -1,9 +1,11 @@
 package com.nucpoop.covserver.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class PasswordRequest {
+@Setter
+public class UserUpdateRequest {
     String password;
-    String newPassword;
+    String location;
 }

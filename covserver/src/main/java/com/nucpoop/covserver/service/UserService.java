@@ -21,4 +21,6 @@ public interface UserService {
     int updateLocation(User user) throws Exception;
 
     int updateNotify(User user) throws Exception;
+
+    int updateUserInfo(User user) throws Exception;
 }
