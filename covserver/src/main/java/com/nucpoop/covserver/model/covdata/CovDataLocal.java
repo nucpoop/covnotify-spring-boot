@@ -9,15 +9,15 @@ import lombok.Getter;
 @XmlRootElement(name = "response")
 public class CovDataLocal {
     @XmlElement
-    Header header;
+    HeaderLocal header;
     @XmlElement
     BodyLocal body;
 
 }
 
 @Getter
-@XmlRootElement
-class Header {
+@XmlRootElement(name = "header")
+class HeaderLocal {
     @XmlElement
     int resultCode;
     @XmlElement
