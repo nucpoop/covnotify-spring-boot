@@ -3,12 +3,7 @@
 
 <mapper namespace="com.nucpoop.covserver.mapper.RoleMapper">
 
-    <!-- <resultMap type="com.nucpoop.covserver.model.Role" id="Role">
-        <result property="id" column="id" />
-        <result property="name" column="name" />
-    </resultMap> -->
-
-    <select id="findByName" parameterType="com.nucpoop.covserver.model.RoleName" resultType="com.nucpoop.covserver.model.Role">
+  <select id="findByName" parameterType="com.nucpoop.covserver.model.RoleName" resultType="com.nucpoop.covserver.model.Role">
   	SELECT * FROM roles where name = #{roleName};
   </select>
 

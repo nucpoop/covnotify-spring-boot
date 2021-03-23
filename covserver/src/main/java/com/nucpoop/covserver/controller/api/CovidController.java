@@ -23,7 +23,7 @@ public class CovidController {
 		return ResponseEntity.ok(jsonObject.toString());
 	}
 
-	@RequestMapping("/Local")
+	@RequestMapping("/local")
 	public ResponseEntity<String> covLocal(@RequestParam(value = "date") String date) throws IOException{
 		SearchCondition condition = SearchCondition.builder().pageNo(1).numberOfRows(1).startCreateDt(date).endCreateDt(date).build();
 		JSONObject jsonObject = XML.toJSONObject(Utils.getCovDataLocal(condition).toString());
