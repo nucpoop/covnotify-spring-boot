@@ -1,6 +1,9 @@
 package com.nucpoop.covserver.util;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,22 +39,30 @@ public class Scheduler {
         // send email
         try {
             Item global = getCovDataGrobal(todayFormat.format(date));
+            Item yesterday = getCovDataGrobal(todayFormat.format(getYesterday()));
 
             List<ItemLocal> items = getCovDataLocal(todayFormat.format(date));
 
             List<User> users = userService.selectUsersForNotify(timeFormat.format(date));
-
+            //+ "(" + NumberFormat.getInstance().format(global.getDecideCnt() - yesterday.getDecideCnt()) + "명)" +
             for (User user : users) {
-                String dataGlobal = "<전국 코로나 정보>\n확진자 : " + global.getDecideCnt() + "명\n격리해제 : " + global.getClearCnt()
-                        + "명\n치료중 : " + global.getCareCnt() + "명\n사망자 : " + global.getDeathCnt() + "명\n\n";
+                String dataGlobal = "<전국 코로나 정보>\n확진자 : " +NumberFormat.getInstance().format(global.getDecideCnt())
+                +"명(" + NumberFormat.getInstance().format(global.getDecideCnt() - yesterday.getDecideCnt()) + "명)\n격리해제 : " + NumberFormat.getInstance().format(global.getClearCnt())
+                +"명(" + NumberFormat.getInstance().format(global.getClearCnt() - yesterday.getClearCnt()) + "명)\n치료중 : " + NumberFormat.getInstance().format(global.getCareCnt())
+                +"명(" + NumberFormat.getInstance().format(global.getCareCnt() - yesterday.getCareCnt()) + "명)\n사망자 : " + NumberFormat.getInstance().format(global.getDeathCnt())
+				+"명(" + NumberFormat.getInstance().format(global.getDeathCnt() - yesterday.getDeathCnt()) + "명)\n\n";
+
 
                 String dataLocal = "";
                 for (ItemLocal item : items) {
 
                     if (user.getLocation().equals(item.getGubun())) {
-                        dataLocal = "<" + user.getLocation() + " 지역 코로나 정보>\n확진자 : " + item.getDefCnt() + "명\n격리해제 : "
-                                + item.getIsolClearCnt() + "명\n치료중 : " + item.getIsolIngCnt() + "명\n사망자 : "
-                                + item.getDeathCnt() + "명\n전일대비 증감 수 : " + item.getIncDec() + "명\n\n";
+                        dataLocal = "<" + user.getLocation() + " 지역 코로나 정보>\n확진자 : " +NumberFormat.getInstance().format(item.getDefCnt())
+						+"명\n격리해제 : " + NumberFormat.getInstance().format(item.getIsolClearCnt())
+						+"명\n치료중 : " + NumberFormat.getInstance().format(item.getIsolIngCnt())
+						+"명\n사망자 : " + NumberFormat.getInstance().format(item.getDeathCnt())
+						+"명\n전일대비 증감 수 : " + NumberFormat.getInstance().format(item.getIncDec())
+						+"명\n\n";
                         break;
                     }
                 }
@@ -85,5 +96,11 @@ public class Scheduler {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private Calendar getYesterday(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal;
     }
 }
