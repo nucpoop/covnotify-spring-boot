@@ -1,5 +1,6 @@
 package com.nucpoop.covserver.util;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,8 +43,8 @@ public class Scheduler {
             List<User> users = userService.selectUsersForNotify(timeFormat.format(date));
 
             for (User user : users) {
-                String dataGlobal = "<전국 코로나 정보>\n확진자 : " + global.getDecideCnt() + "명\n격리해제 : " + global.getClearCnt()
-                        + "명\n치료중 : " + global.getCareCnt() + "명\n사망자 : " + global.getDeathCnt() + "명\n\n";
+                String dataGlobal = "<전국 코로나 정보>\n확진자 : " + NumberFormat.getInstance().format(global.getDecideCnt()) + "명\n격리해제 : " + global.getClearCnt()
+                        + "명\n치료중 : " + NumberFormat.getInstance().format(global.getCareCnt()) + "명\n사망자 : " + NumberFormat.getInstance().format(global.getDeathCnt()) + "명\n\n";
 
                 String dataLocal = "";
                 for (ItemLocal item : items) {
