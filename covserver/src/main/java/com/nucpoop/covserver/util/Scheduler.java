@@ -70,7 +70,7 @@ public class Scheduler {
             }
         } catch (Exception e) {
             System.out.println(e.toString());
-            checkTimeAndNotify();
+            //checkTimeAndNotify();
         }
     }
 
