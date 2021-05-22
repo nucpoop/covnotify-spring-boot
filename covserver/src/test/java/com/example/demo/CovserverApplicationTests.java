@@ -97,7 +97,7 @@ class CovserverApplicationTests {
 			CovData covDataYes = Utils.getCovData();
 			Item yesterday = covDataYes.getBody().getItems().get(0);
 
-			List<User> users = userService.selectUsersForNotify("17");
+			List<User> users = userService.selectUsersForNotify("10");
 
 			for (User user : users) {
 				String dataGlobal = "<전국 코로나 정보>\n확진자 : " +NumberFormat.getInstance().format(global.getDecideCnt())
@@ -124,7 +124,7 @@ class CovserverApplicationTests {
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
-			testCovLocalData();
+			//testCovLocalData();
 		}
 	}
 }
