@@ -117,7 +117,7 @@ public class Utils {
 		System.out.println("Response code: " + conn.getResponseCode());
 		BufferedReader rd;
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 		} else {
 			rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
 		}
