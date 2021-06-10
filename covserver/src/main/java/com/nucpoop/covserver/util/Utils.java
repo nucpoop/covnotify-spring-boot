@@ -128,6 +128,7 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
+		System.out.println("Response data: " + sb.toString());
 		covDataLocal = getLocalResponseXML(sb);
 		return sb;
 	}
