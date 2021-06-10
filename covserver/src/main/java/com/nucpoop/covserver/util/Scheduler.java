@@ -98,9 +98,9 @@ public class Scheduler {
         }
     }
 
-    private Calendar getYesterday(){
+    private Date getYesterday(){
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-        return cal;
+        return cal.getTime();
     }
 }
