@@ -25,6 +25,8 @@ import com.nucpoop.covserver.service.UserService;
 import com.nucpoop.covserver.util.EmailUtilImpl;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +47,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api/user")
 @MapperScan(basePackages = "com.nucpoop.covserver.dao")
 public class UserController {
+
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	EmailUtilImpl emailUtil;

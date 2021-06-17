@@ -13,10 +13,14 @@ import javax.xml.bind.Unmarshaller;
 
 import com.nucpoop.covserver.model.covdata.CovData;
 import com.nucpoop.covserver.model.covdata.CovDataLocal;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.nucpoop.covserver.model.SearchCondition;
 
 public class Utils {
-	
+	private final static Logger logger = LoggerFactory.getLogger(Utils.class);
 
 	private static CovData covData;
 	private static CovDataLocal covDataLocal;
@@ -70,7 +74,8 @@ public class Utils {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Content-type", "application/json");
-		System.out.println("Response code: " + conn.getResponseCode());
+		logger.info("Response code: " + conn.getResponseCode());
+		//System.out.println("Response code: " + conn.getResponseCode());
 
 		BufferedReader rd;
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
@@ -87,7 +92,8 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-		System.out.println("Response data: " + sb.toString());
+		//System.out.println("Response data: " + sb.toString());
+		logger.info("Response data: " + sb.toString());
 		covData = getResponseXML(sb);
 		return sb;
 	}
@@ -114,7 +120,8 @@ public class Utils {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Content-type", "application/json");
-		System.out.println("Response code: " + conn.getResponseCode());
+		logger.info("Response code: " + conn.getResponseCode());
+		//System.out.println("Response code: " + conn.getResponseCode());
 		BufferedReader rd;
 		if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
@@ -128,7 +135,8 @@ public class Utils {
 		}
 		rd.close();
 		conn.disconnect();
-		System.out.println("Response data: " + sb.toString());
+		//System.out.println("Response data: " + sb.toString());
+		logger.info("Response data: " + sb.toString());
 		covDataLocal = getLocalResponseXML(sb);
 		return sb;
 	}
