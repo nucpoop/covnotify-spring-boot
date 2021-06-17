@@ -65,10 +65,10 @@
         <appender-ref ref="Error"/>
     </root>
 
-    <logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+    <!-- <logger name="org.apache.ibatis" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
         <appender-ref ref="Error"/>
-    </logger>
+    </logger> -->
 
 </configuration>
